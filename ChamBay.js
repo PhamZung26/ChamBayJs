@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      1.0
 // @description  Tự động kiểm tra và tìm iframe và div position_frame trên mọi trang, bao gồm các trang với địa chỉ IP
-// @author       Bạn
+// @author       PhamDung
 // @match        http://10.0.0.189:8080/*
 // @match        http://172.16.10.247:8080/*
 // @grant        none
