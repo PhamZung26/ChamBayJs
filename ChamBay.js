@@ -6,6 +6,7 @@
 // @author       Bạn
 // @match        *://*/*       // Chạy trên tất cả các trang web bao gồm địa chỉ IP
 // @match        http://10.0.0.189:8080/*
+// @match        http://172.16.10.247:8080/*
 // @grant        none
 // ==/UserScript==
 'use strict';
