@@ -23,7 +23,7 @@ function tryGetPositionFrame() {
             let leftArea = iframeDocument.getElementById('left-area');
             let pay_diagram = iframeDocument.getElementById('pay_diagram');
             let colMd3 = iframeDocument.querySelector('.col-md-3.p-0');
-            if (pay_diagram && leftArea) {
+            if (pay_diagram && leftArea && positionFrame) {
                 console.log("leftArea đã được tìm thấy:", leftArea);
                 pay_diagram.style.overflowX = 'auto'; // Thêm cuộn ngang
                 pay_diagram.style.whiteSpace = 'nowrap'; // Giữ tất cả các phần tử trên một dòng
