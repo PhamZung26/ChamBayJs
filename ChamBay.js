@@ -1,9 +1,10 @@
+
 // ==UserScript==
 // @name         Auto Detect Position Frame
 // @namespace    http://tampermonkey.net/
 // @version      1.0
 // @description  Tự động kiểm tra và tìm iframe và div position_frame trên mọi trang, bao gồm các trang với địa chỉ IP
-// @author       PhamDung
+// @author       Bạn
 // @match        http://10.0.0.189:8080/*
 // @match        http://172.16.10.247:8080/*
 // @grant        none
@@ -19,11 +20,26 @@ function tryGetPositionFrame() {
         if (iframe.contentDocument || iframe.contentWindow.document) {
             let iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
             let positionFrame = iframeDocument.getElementById('position_frame');
+            let leftArea = iframeDocument.getElementById('left-area');
+            let pay_diagram = iframeDocument.getElementById('pay_diagram');
+            let colMd3 = iframeDocument.querySelector('.col-md-3.p-0');
+            if (pay_diagram && leftArea) {
+                console.log("leftArea đã được tìm thấy:", leftArea);
+                pay_diagram.style.overflowX = 'auto'; // Thêm cuộn ngang
+                pay_diagram.style.whiteSpace = 'nowrap'; // Giữ tất cả các phần tử trên một dòng
+                //pay_diagram.style.width = '500px';
 
-            if (positionFrame) {
-                console.log("position_frame đã được tìm thấy:", positionFrame);
-                positionFrame.style.overflowX = 'auto'; // Thêm cuộn ngang
-                positionFrame.style.whiteSpace = 'nowrap'; // Giữ tất cả các phần tử trên một dòng
+                //positionFrame.style.overflowX = 'auto'; // Thêm cuộn ngang
+                //positionFrame.style.whiteSpace = 'nowrap'; // Giữ tất cả các phần tử trên một dòng
+                positionFrame.style.width = pay_diagram.offsetWidth + 'px';
+
+                //positionFrame.style.marginLeft = '25%';
+                if(colMd3){
+                    leftArea.style.width = colMd3.offsetWidth + 'px';
+                }
+                //pay_diagram.style.marginLeft = (leftArea.offsetWidth + 20) + 'px';
+                //positionFrame.style.maxWidth = '70%';
+                //leftArea.style.width = '25%'
                 // Thực hiện các thao tác với positionFrame
                 // Dừng kiểm tra khi đã tìm thấy
                 clearInterval(intervalID);
