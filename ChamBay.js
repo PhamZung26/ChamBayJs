@@ -27,7 +27,8 @@ function tryGetPositionFrame() {
                 console.log("leftArea đã được tìm thấy:", leftArea);
                 pay_diagram.style.overflowX = 'auto'; // Thêm cuộn ngang
                 pay_diagram.style.whiteSpace = 'nowrap'; // Giữ tất cả các phần tử trên một dòng
-                //pay_diagram.style.width = '500px';
+
+                pay_diagram.style.width = '840px';
 
                 //positionFrame.style.overflowX = 'auto'; // Thêm cuộn ngang
                 //positionFrame.style.whiteSpace = 'nowrap'; // Giữ tất cả các phần tử trên một dòng
@@ -72,4 +73,50 @@ function runScriptAfterIframeLoaded() {
 
 // Gọi hàm để bắt đầu kiểm tra khi iframe đã sẵn sàng
 runScriptAfterIframeLoaded();
+
+function setDivWidth() {
+
+    let iframe = document.getElementsByName('iframe1')[0];
+
+    if (iframe) {
+        // Kiểm tra xem iframe đã tải xong hay chưa
+        if (iframe.contentDocument || iframe.contentWindow.document) {
+            let iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+            // Tìm tất cả hàng (row) trong div #position_frame
+            const rows = iframeDocument.querySelectorAll("#position_frame .row");
+
+
+            // Kiểm tra có ít nhất một hàng để xử lý
+            if (rows.length === 0) return;
+
+            // Cập nhật chiều rộng cho từng cell-item là 65px
+            rows.forEach(row => {
+                const cells = row.querySelectorAll(".cell-item");
+                cells.forEach(cell => {
+                    // Đặt chiều rộng cố định cho mỗi ô
+                    cell.style.width = "60px";
+                    // Gỡ bỏ flex-basis
+                    cell.style.flexBasis = "0";
+                    cell.style.border = "2px solid #8be6fd";
+                });
+                // Nếu hàng là .top_column, gán flex-wrap: nowrap
+                if (row.classList.contains("top_column")) {
+                    row.style.display = "flex";
+                    row.style.flexWrap = "nowrap"; // Không cho phép xuống dòng
+                    const totalWidth = (cells.length) * 65; // 65px cho mỗi ô
+                    row.style.width = `${totalWidth}px`;
+                } else {
+                    const totalWidth = (cells.length + 1) * 65; // 65px cho mỗi ô
+                    row.style.width = `${totalWidth}px`;
+                }
+            });
+
+
+        }
+    }
+}
+
+// Kiểm tra và set chiều rộng liên tục sau mỗi nửa giây (500ms)
+let intervalID2 = setInterval(setDivWidth, 500);
+
 
