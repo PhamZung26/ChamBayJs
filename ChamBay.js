@@ -4,14 +4,14 @@
 // @namespace    http://tampermonkey.net/
 // @version      1.0
 // @description  Tự động kiểm tra và tìm iframe và div position_frame trên mọi trang, bao gồm các trang với địa chỉ IP
-// @author       Bạn
+// @author       PhamDung - 035.358.3260
 // @match        http://10.0.0.189:8080/*
 // @match        http://172.16.10.247:8080/*
 // @grant        none
 // ==/UserScript==
 'use strict';
 let intervalID; // Khai báo intervalID trước
-
+let isUseStick = true;
 function tryGetPositionFrame() {
     let iframe = document.getElementsByName('iframe1')[0];
 
@@ -99,15 +99,58 @@ function setDivWidth() {
                     cell.style.flexBasis = "0";
                     cell.style.border = "2px solid #8be6fd";
                 });
-                // Nếu hàng là .top_column, gán flex-wrap: nowrap
-                if (row.classList.contains("top_column")) {
                     row.style.display = "flex";
                     row.style.flexWrap = "nowrap"; // Không cho phép xuống dòng
-                    const totalWidth = (cells.length) * 65; // 65px cho mỗi ô
+                    const totalWidth = (cells.length + 1) * 60 + 5; // 65px cho mỗi ô
                     row.style.width = `${totalWidth}px`;
+                // Nếu hàng là .top_column, gán flex-wrap: nowrap
+                if (row.classList.contains("top_column")) {
+                    //row.style.position = "sticky";
+                    //row.style.top = "0";
+                    //row.style.zIndex = "11";
+                    // Kiểm tra xem checkbox đã tồn tại chưa
+                    if (!row.querySelector("#stickyCheckbox")) {
+                        // Tạo checkbox cho chế độ sticky
+                        const checkboxDiv = document.createElement("div");
+                        const checkbox = document.createElement("input");
+                        checkbox.type = "checkbox";
+                        checkbox.id = "stickyCheckbox";
+                        checkbox.checked = isUseStick; // Mặc định là checked
+                        const label = document.createElement("label");
+                        label.htmlFor = "stickyCheckbox";
+                        label.innerText = "Chế độ sticky";
+
+                        checkboxDiv.appendChild(checkbox);
+                        checkboxDiv.appendChild(label);
+                        checkboxDiv.style.width = "60px";
+                        row.appendChild(checkboxDiv); // Thêm vào hàng
+                        // Sự kiện cho checkbox
+                        checkbox.addEventListener("change", () => {
+                            isUseStick = checkbox.checked;
+                        });
+                    }
                 } else {
-                    const totalWidth = (cells.length + 1) * 65; // 65px cho mỗi ô
+                    const totalWidth = (cells.length + 1) * 60; // 65px cho mỗi ô
                     row.style.width = `${totalWidth}px`;
+                }
+                // Cố định div có class 'col-md-2 col-03 indexrow number-grid'
+                const stickyDiv = row.querySelector('.col-md-2.col-03.indexrow.number-grid');
+                if (stickyDiv) {
+                    console.log(isUseStick);
+                    if(isUseStick){
+                        stickyDiv.style.width = "60px";
+                        stickyDiv.style.flexBasis = "0";
+                        stickyDiv.style.position = "sticky";
+                        stickyDiv.style.right = "0";
+                        stickyDiv.style.zIndex = "10";
+                        stickyDiv.style.backgroundColor = "white"; // Có thể điều chỉnh màu nền
+
+                    }else{
+                        stickyDiv.style.width = "60px";
+                        stickyDiv.style.flexBasis = "0";
+                        stickyDiv.style.position = "";
+                    }
+
                 }
             });
 
